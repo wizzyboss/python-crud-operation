@@ -1,0 +1,87 @@
+import tkinter as tk
+from tkinter import messagebox
+import pymysql
+from supabase import create_client, Client
+import socket
+import threading
+import time
+
+# --- CONFIG ---
+URL = "https://uldvntwxmskjbolqefvy.supabase.co"
+KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsZHZudHd4bXNramJvbHFlZnZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMjg3MTYsImV4cCI6MjA5MzkwNDcxNn0.sO4Q68l4-dNGK4F4iwUwF6001k6hkU0BYCq-pyJEp1A"
+supabase: Client = create_client(URL, KEY)
+
+def is_online():
+    try:
+        socket.create_connection(("8.8.8.8", 53), timeout=2)
+        return True
+    except:
+        return False
+
+def background_sync_worker():
+    """This function runs in the background forever"""
+    while True:
+        if is_online():
+            try:
+                conn = pymysql.connect(host='127.0.0.1', user='root', password='', database='store_db', cursorclass=pymysql.cursors.DictCursor)
+                with conn.cursor() as cursor:
+                    # Look for anything not synced
+                    cursor.execute("SELECT id, label, price FROM store_db WHERE synced = 0")
+                    rows = cursor.fetchall()
+                    
+                    if rows:
+                        print(f"Internet back! Syncing {len(rows)} items...")
+                        data = [{"label": r['label'], "price": float(r['price'])} for r in rows]
+                        supabase.table("store_db").insert(data).execute()
+                        
+                        # Mark as done
+                        ids = [r['id'] for r in rows]
+                        cursor.execute(f"UPDATE store_db SET synced = 1 WHERE id IN ({','.join(['%s']*len(ids))})", tuple(ids))
+                        conn.commit()
+                conn.close()
+            except Exception as e:
+                print(f"Background Sync Error: {e}")
+        
+        time.sleep(5) # Check every 5 seconds
+
+def save_to_local():
+    """Saves to XAMPP immediately"""
+    try:
+        data = []
+        for i in range(5):
+            l, p = label_entries[i].get(), price_entries[i].get()
+            if l and p:
+                data.append((l, float(p)))
+        
+        if not data:
+            messagebox.showerror("Error", "Enter at least one item")
+            return
+
+        db = pymysql.connect(host='127.0.0.1', user='root', password='', database='store_db')
+        with db.cursor() as cur:
+            cur.executemany("INSERT INTO store_db (label, price, synced) VALUES (%s, %s, 0)", data)
+        db.commit()
+        db.close()
+        
+        messagebox.showinfo("Saved", "Saved locally. Background sync is active!")
+        for e in label_entries + price_entries: e.delete(0, tk.END)
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
+# --- UI SETUP ---
+root = tk.Tk()
+root.title("Instant Auto-Sync")
+
+label_entries, price_entries = [], []
+for i in range(5):
+    le = tk.Entry(root); le.grid(row=i, column=0, padx=10, pady=5)
+    pe = tk.Entry(root); pe.grid(row=i, column=1, padx=10, pady=5)
+    label_entries.append(le); price_entries.append(pe)
+
+tk.Button(root, text="SAVE NOW", command=save_to_local, bg="blue", fg="white").grid(row=6, column=0, columnspan=2, pady=20)
+
+# START THE BACKGROUND THREAD
+sync_thread = threading.Thread(target=background_sync_worker, daemon=True)
+sync_thread.start()
+
+root.mainloop()

@@ -1,0 +1,107 @@
+{
+  "exported_at": "2026-05-11T11:53:57.930708",
+  "visible_networks": [
+    {
+      "ssid": "egg hi",
+      "signal": "91%",
+      "auth": "WPA2-Personal",
+      "bssid": "9a:37:c4:f0:28:3c",
+      "channel": "9",
+      "password": "12345678"
+    },
+    {
+      "ssid": "9a:37:c4:f0:28:3c",
+      "signal": "N/A",
+      "auth": "Unknown",
+      "bssid": "N/A",
+      "channel": "N/A",
+      "password": null
+    }
+  ],
+  "all_stored_profiles": [
+    {
+      "ssid": "egg hi",
+      "password": "12345678",
+      "auth": "WPA2-Personal",
+      "currently_visible": true
+    },
+    {
+      "ssid": "TECNO CAMON 40 Pro",
+      "password": "12345678",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "Ocean's iPhone",
+      "password": null,
+      "auth": "Unknown",
+      "currently_visible": false
+    },
+    {
+      "ssid": "MTN_4G_45CBCB",
+      "password": "662FDEAF",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "SMART 9",
+      "password": "tradeforest",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "MTN_4G_09614C",
+      "password": "D6748C57",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "wisdom",
+      "password": null,
+      "auth": "Open",
+      "currently_visible": false
+    },
+    {
+      "ssid": "wizzy 2",
+      "password": null,
+      "auth": "Open",
+      "currently_visible": false
+    },
+    {
+      "ssid": "wizzy",
+      "password": "qwerty123",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "wizzy boss",
+      "password": "1q2w3e4r",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "wizzyboss03",
+      "password": "12345678",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "Infinix HOT 10",
+      "password": "12345678",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "Infinix SMART 6",
+      "password": "keji4932",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    },
+    {
+      "ssid": "Blackbeauty",
+      "password": "success28@",
+      "auth": "WPA2-Personal",
+      "currently_visible": false
+    }
+  ]
+}
